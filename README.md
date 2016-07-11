@@ -1,2 +1,2 @@
-# your-mom
+# Your Mom
 A golfing language
