@@ -1,0 +1,24 @@
+{
+  "name": "your-mom",
+  "version": "1.0.0",
+  "description": "y u do dis ;_; a golf lang",
+  "main": "lib/yourmom.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel src -d lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tuxcrafting/your-mom.git"
+  },
+  "author": "TuxCrafting",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/tuxcrafting/your-mom/issues"
+  },
+  "homepage": "https://github.com/tuxcrafting/your-mom#readme",
+  "devDependencies": {
+    "babel-cli": "^6.10.1",
+    "babel-preset-es2015": "^6.9.0"
+  }
+}
