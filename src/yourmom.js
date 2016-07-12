@@ -18,15 +18,15 @@ class YourMom {
         return this.readv();
     }
     readv() {
-        var _ = readlineSync.prompt({ prompt: "" });
+        let _ = readlineSync.prompt({ prompt: "" });
         if (_.match(/^[-+]?\d+$/g) != null) return parseInt(_);
         if (_.match(/^[-+]?\d+(\.\d*)?(e[-+]?\d+(\.\d+)?)?$/g) != null) return parseFloat(_);
         return _;
     }
     run(tokens) {
-        var s, func, arr, _;
+        let s, func, arr, _;
         while (tokens.length) {
-            var tok = tokens.shift();
+            let tok = tokens.shift();
             if (NUMS.indexOf(tok) != -1)
                 this.stack.push(this.pop() * 24 + NUMS.indexOf(tok));
             else switch (tok) {
@@ -50,12 +50,12 @@ class YourMom {
             case "^": this.applydyadic((a, b) => a ^ b); break;
             case "_": console.log(this.pop()); break;
             case "!":
-                var i = this.pop();
+                let i = this.pop();
                 this.memory[i] = this.pop();
                 break;
             case "?": this.stack.push(this.memory[this.pop()]); break;
             case "'":
-                s = "";
+                let s = "";
                 while (tokens.length) {
                     tok = tokens.shift();
                     if (tok == "'") break;
@@ -66,15 +66,15 @@ class YourMom {
             case "⊞": this.stack.push(this.pop() + 1); break;
             case "⊟": this.stack.push(this.pop() - 1); break;
             case ":":
-                _ = this.pop();
+                let _ = this.pop();
                 this.stack.push(_);
                 this.stack.push(_);
                 break;
             case ";": this.pop(); break;
             case "(":
-                s = "";
-                var sm = false;
-                var l = 0;
+                let s = "";
+                let sm = false;
+                let l = 0;
                 while (tokens.length) {
                     tok = tokens.shift();
                     if (tok == "'") sm = !sm;
@@ -92,19 +92,19 @@ class YourMom {
                 });
                 break;
             case "€":
-                s = tokens.shift();
+                let s = tokens.shift();
                 this.stack.push(() => {
                     this.run([s]);
                 });
                 break;
             case "$": this.pop()(); break;
             case "\\":
-                _ = this.memory;
+                let _ = this.memory;
                 this.memory = this.backmemory;
                 this.backmemory = _;
                 break;
             case "@":
-                _ = this.pop();
+                let _ = this.pop();
                 while (this.stack[this.stack.length - 1]) _();
                 break;
             case "ð": this.stack.push(readlineSync.prompt({ prompt: "" })); break;
@@ -115,9 +115,9 @@ class YourMom {
             case ".": this.applydyadic((a, b) => a.concat(b)); break;
             case "ç": this.stack.push([]); break;
             case "Ç":
-                func = this.pop();
-                arr = this.pop();
-                _ = arr.map((x) => {
+                let func = this.pop();
+                let arr = this.pop();
+                let _ = arr.map((x) => {
                     this.stack.push(x);
                     func();
                     return this.pop();
@@ -125,9 +125,9 @@ class YourMom {
                 this.stack.push(_);
                 break;
             case "ß":
-                func = this.pop();
-                arr = this.pop();
-                _ = arr.filter((x) => {
+                let func = this.pop();
+                let arr = this.pop();
+                let _ = arr.filter((x) => {
                     this.stack.push(x);
                     func();
                     return this.pop();
@@ -138,7 +138,7 @@ class YourMom {
         }
     }
     applydyadic(l) {
-        var a = this.pop(),
+        let a = this.pop(),
             b = this.pop();
         this.stack.push(l(b, a));
     }
@@ -155,6 +155,6 @@ fs.readFile(args[0], "utf-8", (err, data) => {
         process.exit(1);
     }
     var t = new YourMom();
-    t.run(data.split(""));
+    t.run([...data]);
     while (t.stack.length) console.log(t.stack.pop());
 });
