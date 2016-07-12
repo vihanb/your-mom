@@ -5,7 +5,7 @@
   "main": "lib/yourmom.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel src -d lib"
+    "build": "./node_modules/.bin/babel src -d lib"
   },
   "repository": {
     "type": "git",
