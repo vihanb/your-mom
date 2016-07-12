@@ -6,73 +6,59 @@ const fs = require("fs");
 const args = process.argv.splice(2);
 
 const NUMS = "0123456789ABCDEFGHIJKLMN";
+const WHITESPACE = " \n\t\v\r\f";
 
 class YourMom {
     constructor() {
         this.stack = [];
         this.backmemory = [];
         this.memory = [];
-    }
-    pop() {
-        if (this.stack.length) return this.stack.pop();
-        return this.readv();
-    }
-    readv() {
-        let _ = readlineSync.prompt({ prompt: "" });
-        if (_.match(/^[-+]?\d+$/g) != null) return parseInt(_);
-        if (_.match(/^[-+]?\d+(\.\d*)?(e[-+]?\d+(\.\d+)?)?$/g) != null) return parseFloat(_);
-        return _;
-    }
-    run(tokens) {
-        let s, func, arr, _;
-        while (tokens.length) {
-            let tok = tokens.shift();
-            if (NUMS.indexOf(tok) != -1)
-                this.stack.push(this.pop() * 24 + NUMS.indexOf(tok));
-            else switch (tok) {
-            case "+": this.applydyadic((a, b) => a + b); break;
-            case "-": this.applydyadic((a, b) => a - b); break;
-            case "*": this.applydyadic((a, b) => a * b); break;
-            case "/": this.applydyadic((a, b) => a / b); break;
-            case "%": this.applydyadic((a, b) => a % b); break;
-            case "=": this.applydyadic((a, b) => +(a == b)); break;
-            case "≠": this.applydyadic((a, b) => +(a != b)); break;
-            case "<": this.applydyadic((a, b) => +(a < b)); break;
-            case "≤": this.applydyadic((a, b) => +(a <= b)); break;
-            case ">": this.applydyadic((a, b) => +(a > b)); break;
-            case "≥": this.applydyadic((a, b) => +(a >= b)); break;
-            case "#": this.stack.push(0); break;
-            case "¥": this.stack.push(1); break;
-            case "¬": this.stack.push(this.pop() ^ 1); break;
-            case "~": this.stack.push(~this.pop()); break;
-            case "&": this.applydyadic((a, b) => a & b); break;
-            case "|": this.applydyadic((a, b) => a | b); break;
-            case "^": this.applydyadic((a, b) => a ^ b); break;
-            case "_": console.log(this.pop()); break;
-            case "!":
+        this.map = new Map([
+            ["+", () => { this.applydyadic((a, b) => a + b); }],
+            ["-", () => { this.applydyadic((a, b) => a - b);}],
+            ["*", () => { this.applydyadic((a, b) => a * b);}],
+            ["/", () => { this.applydyadic((a, b) => a / b);}],
+            ["%", () => { this.applydyadic((a, b) => a % b);}],
+            ["=", () => { this.applydyadic((a, b) => +(a == b));}],
+            ["≠", () => { this.applydyadic((a, b) => +(a != b));}],
+            ["<", () => { this.applydyadic((a, b) => +(a < b));}],
+            ["≤", () => { this.applydyadic((a, b) => +(a <= b));}],
+            [">", () => { this.applydyadic((a, b) => +(a > b));}],
+            ["≥", () => { this.applydyadic((a, b) => +(a >= b));}],
+            ["#", () => { this.stack.push(0);}],
+            ["¥", () => { this.stack.push(1);}],
+            ["¬", () => { this.stack.push(this.pop() ^ 1);}],
+            ["~", () => { this.stack.push(~this.pop());}],
+            ["&", () => { this.applydyadic((a, b) => a & b);}],
+            ["|", () => { this.applydyadic((a, b) => a | b);}],
+            ["^", () => { this.applydyadic((a, b) => a ^ b);}],
+            ["_", () => { console.log(this.pop()); }],
+            ["!", () => {
                 let i = this.pop();
                 this.memory[i] = this.pop();
-                break;
-            case "?": this.stack.push(this.memory[this.pop()]); break;
-            case "'":
-                s = "";
+            }],
+            ["?", () => { this.stack.push(this.memory[this.pop()]); }],
+            ["'", (tokens) => {
+                let tok;
+                let s = "";
                 while (tokens.length) {
                     tok = tokens.shift();
                     if (tok == "'") break;
                     s += tok;
                 }
                 this.stack.push(s);
-                break;
-            case "⊞": this.stack.push(this.pop() + 1); break;
-            case "⊟": this.stack.push(this.pop() - 1); break;
-            case ":":
-                _ = this.pop();
+            }],
+            ["⊞", () => { this.stack.push(this.pop() + 1); }],
+            ["⊟", () => { this.stack.push(this.pop() - 1); }],
+            [":", () => {
+                let _ = this.pop();
                 this.stack.push(_);
                 this.stack.push(_);
-                break;
-            case ";": this.pop(); break;
-            case "(":
-                s = "";
+            }],
+            [";", () => { this.pop(); }],
+            ["(", (tokens) => {
+                let tok;
+                let s = "";
                 let sm = false;
                 let l = 0;
                 while (tokens.length) {
@@ -90,50 +76,73 @@ class YourMom {
                 this.stack.push(() => {
                     this.run(s.split(""));
                 });
-                break;
-            case "€":
-                s = tokens.shift();
+            }],
+            ["€", (tokens) => {
+                let s = tokens.shift();
                 this.stack.push(() => {
                     this.run([s]);
                 });
-                break;
-            case "$": this.pop()(); break;
-            case "\\":
-                _ = this.memory;
+            }],
+            ["$", () => { this.pop()(); }],
+            ["\\", () => {
+                let _ = this.memory;
                 this.memory = this.backmemory;
                 this.backmemory = _;
-                break;
-            case "@":
-                _ = this.pop();
+            }],
+            ["@", () => {
+                let _ = this.pop();
                 while (this.stack[this.stack.length - 1]) _();
-                break;
-            case "ð": this.stack.push(readlineSync.prompt({ prompt: "" })); break;
-            case "Ð": this.stack.push(this.readv()); break;
-            case "²": this.stack.push(Math.pow(this.pop(), 2)); break;
-            case "³": this.stack.push(Math.pow(this.pop(), 3)); break;
-            case ",": this.applydyadic((a, b) => a.concat([b])); break;
-            case ".": this.applydyadic((a, b) => a.concat(b)); break;
-            case "ç": this.stack.push([]); break;
-            case "Ç":
-                func = this.pop();
-                arr = this.pop();
-                _ = arr.map((x) => {
+            }],
+            ["ð", () => { this.stack.push(readlineSync.prompt({ prompt: "" })); }],
+            ["Ð", () => { this.stack.push(this.readv()); }],
+            ["²", () => { this.stack.push(Math.pow(this.pop(), 2)); }],
+            ["³", () => { this.stack.push(Math.pow(this.pop(), 3)); }],
+            [",", () => { this.applydyadic((a, b) => a.concat([b])); }],
+            [".", () => { this.applydyadic((a, b) => a.concat(b)); }],
+            ["ç", () => { this.stack.push([]); }],
+            ["Ç", () => {
+                let func = this.pop();
+                let arr = this.pop();
+                let _ = arr.map((x) => {
                     this.stack.push(x);
                     func();
                     return this.pop();
                 });
                 this.stack.push(_);
-                break;
-            case "ß":
-                func = this.pop();
-                arr = this.pop();
-                _ = arr.filter((x) => {
+            }],
+            ["ß", () => {
+                let func = this.pop();
+                let arr = this.pop();
+                let _ = arr.filter((x) => {
                     this.stack.push(x);
                     func();
                     return this.pop();
                 });
                 this.stack.push(_);
-                break;
+            }],
+        ]);
+    }
+    pop() {
+        if (this.stack.length) return this.stack.pop();
+        return this.readv();
+    }
+    readv() {
+        let _ = readlineSync.prompt({ prompt: "" });
+        if (_.match(/^[-+]?\d+$/g) != null) return parseInt(_);
+        if (_.match(/^[-+]?\d+(\.\d*)?(e[-+]?\d+(\.\d+)?)?$/g) != null) return parseFloat(_);
+        return _;
+    }
+    run(tokens) {
+        while (tokens.length) {
+            let tok = tokens.shift();
+            if (NUMS.indexOf(tok) != -1)
+                this.stack.push(this.pop() * 24 + NUMS.indexOf(tok));
+            else if (WHITESPACE.indexOf(tok) != -1) ;
+            else {
+                let _ = this.map.get(tok);
+                if (typeof _ === "undefined") {
+                    console.log("y u do dis ;_; y u do a syntax error ;_; '" + tok + "'");
+                } else _(tokens);
             }
         }
     }
