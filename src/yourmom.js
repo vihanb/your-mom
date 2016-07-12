@@ -109,7 +109,6 @@ class YourMom {
                 break;
             case "ð": this.stack.push(readlineSync.prompt({ prompt: "" })); break;
             case "Ð": this.stack.push(this.readv()); break;
-            case "©": console.log(this.pop()); break;
             case "²": this.stack.push(Math.pow(this.pop(), 2)); break;
             case "³": this.stack.push(Math.pow(this.pop(), 3)); break;
             case ",": this.applydyadic((a, b) => a.concat([b])); break;
