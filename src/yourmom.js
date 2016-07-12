@@ -120,6 +120,22 @@ class YourMom {
                 });
                 this.stack.push(_);
             }],
+            ["§", () => {
+                this.stack.push(this.pop()+"");
+            }],
+            ["í", () => {
+                this.stack.push(parseInt(this.pop()));
+            }],
+            ["Í", () => {
+                let s = this.pop();
+                let n = 0;
+                for (let i = 0; i < s.length; i++)
+                   n = n * 24 + NUMS.indexOf(s[i]);
+                this.stack.push(n);
+            }],
+            ["þ", () => {
+                this.stack.push(parseFloat(this.pop()));
+            }],
         ]);
     }
     pop() {
