@@ -24,7 +24,7 @@ class YourMom {
         return _;
     }
     run(tokens) {
-        var s, _;
+        var s, func, arr, _;
         while (tokens.length) {
             var tok = tokens.shift();
             if (NUMS.indexOf(tok) != -1)
@@ -36,10 +36,15 @@ class YourMom {
             case "/": this.applydyadic((a, b) => a / b); break;
             case "%": this.applydyadic((a, b) => a % b); break;
             case "=": this.applydyadic((a, b) => +(a == b)); break;
+            case "≠": this.applydyadic((a, b) => +(a != b)); break;
             case "<": this.applydyadic((a, b) => +(a < b)); break;
+            case "≤": this.applydyadic((a, b) => +(a <= b)); break;
             case ">": this.applydyadic((a, b) => +(a > b)); break;
+            case "≥": this.applydyadic((a, b) => +(a >= b)); break;
             case "#": this.stack.push(0); break;
             case "¥": this.stack.push(1); break;
+            case "¬": this.stack.push(this.pop() ^ 1); break;
+            case "~": this.stack.push(~this.pop()); break;
             case "&": this.applydyadic((a, b) => a & b); break;
             case "|": this.applydyadic((a, b) => a | b); break;
             case "^": this.applydyadic((a, b) => a ^ b); break;
@@ -86,6 +91,12 @@ class YourMom {
                     this.run(s.split(""));
                 });
                 break;
+            case "€":
+                s = tokens.shift();
+                this.stack.push(() => {
+                    this.run([s]);
+                });
+                break;
             case "$": this.pop()(); break;
             case "\\":
                 _ = this.memory;
@@ -99,6 +110,31 @@ class YourMom {
             case "ð": this.stack.push(readlineSync.prompt({ prompt: "" })); break;
             case "Ð": this.stack.push(this.readv()); break;
             case "©": console.log(this.pop()); break;
+            case "²": this.stack.push(Math.pow(this.pop(), 2)); break;
+            case "³": this.stack.push(Math.pow(this.pop(), 3)); break;
+            case ",": this.applydyadic((a, b) => a.concat([b])); break;
+            case ".": this.applydyadic((a, b) => a.concat(b)); break;
+            case "ç": this.stack.push([]); break;
+            case "Ç":
+                func = this.pop();
+                arr = this.pop();
+                _ = arr.map((x) => {
+                    this.stack.push(x);
+                    func();
+                    return this.pop();
+                });
+                this.stack.push(_);
+                break;
+            case "ß":
+                func = this.pop();
+                arr = this.pop();
+                _ = arr.filter((x) => {
+                    this.stack.push(x);
+                    func();
+                    return this.pop();
+                });
+                this.stack.push(_);
+                break;
             }
         }
     }
