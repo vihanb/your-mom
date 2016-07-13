@@ -18,7 +18,7 @@ module.exports = {
     },
     */
     decompress: (b) => {
-        let s = [],
+        let s = "",
             letters = [];
         let i = 0;
         while (b[i] != 0xFF)
