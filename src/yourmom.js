@@ -10,7 +10,7 @@ const NUMS = "0123456789ABCDEFGHIJKLMN";
 const WHITESPACE = " \n\t\v\r\f";
 
 let CODEPAGE = Array.range(0, 128).map((x) => String.fromCharCode(x));
-CODEPAGE += "«»≠≤≥¥¬⊞⊟æ€ðÐ²³¼½¾çÇß§íÍþ";
+CODEPAGE += "«»≠≤≥¥¬⊞⊟æ€ðÐ²³¼½¾çÇß§íÍþ®⍳";
 CODEPAGE += Array.range(CODEPAGE.length, 256).map((x) => String.fromCharCode(x));
 
 class YourMom {
@@ -136,6 +136,10 @@ class YourMom {
                 });
                 this.stack.push(_);
             }],
+            ["⍳", () => {
+                let i = this.pop();
+                this.stack.push(this.stack[this.stack.length - 1][i]);
+            }],
             ["§", () => {
                 this.stack.push(this.pop()+"");
             }],
@@ -151,6 +155,9 @@ class YourMom {
             }],
             ["þ", () => {
                 this.stack.push(parseFloat(this.pop()));
+            }],
+            ["®", () => {
+                this.applydyadic((a, b) => Array.range(a, b));
             }],
         ]);
     }
