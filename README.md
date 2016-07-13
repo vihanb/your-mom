@@ -1,6 +1,6 @@
 # Your Mom
 A golfing language
 
-Just run `npm install && npm run build` to build
+Just run `npm install` to install and compile. Then run `npm start` or `node ./lib/yourmom.js` to run.
 
-`npm run build` visibly don't work on some machines. If this happen to you, run directly `src/yourmom.js`
+If `npm install` errors. Run `rm -rf node_modules/ && npm install`.
