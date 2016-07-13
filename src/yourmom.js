@@ -3,6 +3,7 @@
 const readlineSync = require("readline-sync");
 const fs = require("fs");
 require("./utils.js");
+const jellycomp = require("./jellycomp.js");
 
 const args = process.argv.splice(2);
 
@@ -149,8 +150,8 @@ class YourMom {
             ["Í", () => {
                 let s = this.pop();
                 let n = 0;
-                for (let i = 0; i < s.length; i++)
-                    n = n * 24 + NUMS.indexOf(s[i]);
+                for (let c in s)
+                    n = n * 24 + NUMS.indexOf(c);
                 this.stack.push(n);
             }],
             ["þ", () => {
@@ -158,6 +159,9 @@ class YourMom {
             }],
             ["®", () => {
                 this.applydyadic((a, b) => Array.range(a, b));
+            }],
+            ["`", () => {
+                this.stack.push(jellycomp.decompress([...new Buffer(this.pop(), "base64")]));
             }],
         ]);
     }
