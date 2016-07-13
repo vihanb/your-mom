@@ -22,6 +22,6 @@
     "babel-preset-es2015": "^6.9.0"
   },
   "dependencies": {
-    "readline-sync": "^1.4.4"
+    "prompt-sync": "^4.1.4"
   }
 }

@@ -1,6 +1,6 @@
 "use strict";
 
-const readlineSync = require("readline-sync");
+const prompt = require("prompt-sync")();
 const fs = require("fs");
 require("./utils.js");
 const jellycomp = require("./jellycomp.js");
@@ -107,7 +107,7 @@ class YourMom {
                 let _ = this.pop();
                 while (this.stack[this.stack.length - 1]) _();
             }],
-            ["ð", () => { this.stack.push(readlineSync.prompt({ prompt: "" })); }],
+            ["ð", () => { this.stack.push(prompt()); }],
             ["Ð", () => { this.stack.push(this.readv()); }],
             ["²", () => { this.stack.push(Math.pow(this.pop(), 2)); }],
             ["³", () => { this.stack.push(Math.pow(this.pop(), 3)); }],
@@ -170,7 +170,7 @@ class YourMom {
         return this.readv();
     }
     readv() {
-        let _ = readlineSync.prompt({ prompt: "" });
+        let _ = prompt();
         if (_.match(/^[-+]?\d+$/g) != null) return parseInt(_);
         if (_.match(/^[-+]?\d+(\.\d*)?(e[-+]?\d+(\.\d+)?)?$/g) != null) return parseFloat(_);
         return _;
