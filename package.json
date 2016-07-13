@@ -5,6 +5,7 @@
   "main": "lib/yourmom.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublish": "./node_modules/.bin/babel src -d lib --minified",
     "build": "./node_modules/.bin/babel src -d lib"
   },
   "repository": {
