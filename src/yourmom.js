@@ -15,23 +15,25 @@ class YourMom {
         this.memory = [];
         this.map = new Map([
             ["+", () => { this.applydyadic((a, b) => a + b); }],
-            ["-", () => { this.applydyadic((a, b) => a - b);}],
-            ["*", () => { this.applydyadic((a, b) => a * b);}],
-            ["/", () => { this.applydyadic((a, b) => a / b);}],
-            ["%", () => { this.applydyadic((a, b) => a % b);}],
-            ["=", () => { this.applydyadic((a, b) => +(a == b));}],
-            ["≠", () => { this.applydyadic((a, b) => +(a != b));}],
-            ["<", () => { this.applydyadic((a, b) => +(a < b));}],
-            ["≤", () => { this.applydyadic((a, b) => +(a <= b));}],
-            [">", () => { this.applydyadic((a, b) => +(a > b));}],
-            ["≥", () => { this.applydyadic((a, b) => +(a >= b));}],
-            ["#", () => { this.stack.push(0);}],
-            ["¥", () => { this.stack.push(1);}],
-            ["¬", () => { this.stack.push(this.pop() ^ 1);}],
-            ["~", () => { this.stack.push(~this.pop());}],
-            ["&", () => { this.applydyadic((a, b) => a & b);}],
-            ["|", () => { this.applydyadic((a, b) => a | b);}],
-            ["^", () => { this.applydyadic((a, b) => a ^ b);}],
+            ["-", () => { this.applydyadic((a, b) => a - b); }],
+            ["*", () => { this.applydyadic((a, b) => a * b); }],
+            ["/", () => { this.applydyadic((a, b) => a / b); }],
+            ["%", () => { this.applydyadic((a, b) => a % b); }],
+            ["=", () => { this.applydyadic((a, b) => +(a == b)); }],
+            ["≠", () => { this.applydyadic((a, b) => +(a != b)); }],
+            ["<", () => { this.applydyadic((a, b) => +(a < b)); }],
+            ["≤", () => { this.applydyadic((a, b) => +(a <= b)); }],
+            [">", () => { this.applydyadic((a, b) => +(a > b)); }],
+            ["≥", () => { this.applydyadic((a, b) => +(a >= b)); }],
+            ["#", () => { this.stack.push(0); }],
+            ["¥", () => { this.stack.push(1); }],
+            ["¬", () => { this.stack.push(this.pop() ^ 1); }],
+            ["~", () => { this.stack.push(~this.pop()); }],
+            ["&", () => { this.applydyadic((a, b) => a & b); }],
+            ["|", () => { this.applydyadic((a, b) => a | b); }],
+            ["^", () => { this.applydyadic((a, b) => a ^ b); }],
+            ["«", () => { this.applydyadic((a, b) => a << b); }],
+            ["»", () => { this.applydyadic((a, b) => a >> b); }],
             ["_", () => { console.log(this.pop()); }],
             ["!", () => {
                 let i = this.pop();
@@ -56,6 +58,12 @@ class YourMom {
                 this.stack.push(_);
             }],
             [";", () => { this.pop(); }],
+            ["æ", () => {
+                let a = this.pop();
+                let b = this.pop();
+                this.stack.push(a);
+                this.stack.push(b);
+            }],
             ["(", (tokens) => {
                 let tok;
                 let s = "";
@@ -97,6 +105,9 @@ class YourMom {
             ["Ð", () => { this.stack.push(this.readv()); }],
             ["²", () => { this.stack.push(Math.pow(this.pop(), 2)); }],
             ["³", () => { this.stack.push(Math.pow(this.pop(), 3)); }],
+            ["¼", () => { this.stack.push(this.pop() / 4); }],
+            ["½", () => { this.stack.push(this.pop() / 2); }],
+            ["¾", () => { this.stack.push(this.pop() * 0.75); }],
             [",", () => { this.applydyadic((a, b) => a.concat([b])); }],
             [".", () => { this.applydyadic((a, b) => a.concat(b)); }],
             ["ç", () => { this.stack.push([]); }],
