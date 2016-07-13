@@ -2,11 +2,16 @@
 
 const readlineSync = require("readline-sync");
 const fs = require("fs");
+require("./utils.js");
 
 const args = process.argv.splice(2);
 
 const NUMS = "0123456789ABCDEFGHIJKLMN";
 const WHITESPACE = " \n\t\v\r\f";
+
+let CODEPAGE = Array.range(0, 128).map((x) => String.fromCharCode(x));
+CODEPAGE += "«»≠≤≥¥¬⊞⊟æ€ðÐ²³¼½¾çÇß§íÍþ";
+CODEPAGE += Array.range(CODEPAGE.length, 256).map((x) => String.fromCharCode(x));
 
 class YourMom {
     constructor() {
@@ -141,7 +146,7 @@ class YourMom {
                 let s = this.pop();
                 let n = 0;
                 for (let i = 0; i < s.length; i++)
-                   n = n * 24 + NUMS.indexOf(s[i]);
+                    n = n * 24 + NUMS.indexOf(s[i]);
                 this.stack.push(n);
             }],
             ["þ", () => {
@@ -167,7 +172,7 @@ class YourMom {
             else if (WHITESPACE.indexOf(tok) != -1) ;
             else {
                 let _ = this.map.get(tok);
-                if (typeof _ === "undefined") {
+                if (Object.isUndef(_)) {
                     console.log("y u do dis ;_; y u do a syntax error ;_; '" + tok + "'");
                 } else _(tokens);
             }
