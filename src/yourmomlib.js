@@ -182,6 +182,7 @@ class YourMom {
                 let _ = this.map.get(tok);
                 if (Object.isUndef(_)) {
                     console.log("y u do dis ;_; y u do a syntax error ;_; '" + tok + "'");
+                    process.exit(1);
                 } else _(tokens);
             }
         }
