@@ -1,10 +1,10 @@
 {
   "name": "your-mom",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "y u do dis ;_; a golf lang",
   "main": "lib/yourmom.js",
   "bin": {
-    "your-mom": "lib/yourmom.js"
+    "your-mom": "./lib/yourmom.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
