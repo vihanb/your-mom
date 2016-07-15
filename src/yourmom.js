@@ -16,7 +16,7 @@ function _run(data) {
 }
 
 if (typeof commander.args[0] === "undefined") {
-    console.log(";_; u fergit file name ;_; y u do dis");
+    console.log(";_; y u fergit file name ;_; y u do dis");
     process.exit(1);
 }
 
