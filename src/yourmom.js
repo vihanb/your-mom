@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const fs = require("fs");
 const commander = require("commander");
 const yourmom = require("./yourmomlib.js");
